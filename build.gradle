@@ -24,6 +24,7 @@ dependencies {
     compile "org.jboss.arquillian.container:arquillian-tomcat-remote-7:1.0.0.CR6"
     compile "junit:junit:4.11"
     compile "org.apache.ant:ant:1.9.3"
+    compile "org.eclipse.jdt.core.compiler:ecj:3.7.2"
 }
 
 task wrapper(type: Wrapper) {
