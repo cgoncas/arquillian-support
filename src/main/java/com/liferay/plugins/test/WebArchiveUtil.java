@@ -40,7 +40,7 @@ public class WebArchiveUtil {
 
 			_temporaryFolderRoot = _temporaryFolder.getRoot();
 
-			Project antProject = configureAntProject();
+			Project antProject = configureAntProjectForWar();
 
 			antProject.executeTarget(
 				LiferayPluginsBuildConstants.TARGET_DIRECT_DEPLOY);
@@ -56,6 +56,44 @@ public class WebArchiveUtil {
 
 			WebArchive webArchive = ShrinkWrap.createFromZipFile(
 				WebArchive.class, warFile);
+
+			return webArchive;
+		}
+		finally {
+			_temporaryFolder.delete();
+		}
+	}
+
+	public static WebArchive createJarWebArchive() throws IOException {
+		try {
+			_temporaryFolder = new TemporaryFolder();
+
+			_temporaryFolder.create();
+
+			_temporaryFolderRoot = _temporaryFolder.getRoot();
+
+			Project antProject = configureAntProjectForJar();
+
+			antProject.executeTarget(
+				LiferayPluginsBuildConstants.TARGET_DEPLOY);
+
+			String pluginName =
+				antProject.getProperty(
+					LiferayPluginsBuildConstants.PROPERTY_PLUGIN_NAME);
+
+			String pluginFullVersion =
+				antProject.getProperty(
+					LiferayPluginsBuildConstants.PROPERTY_PLUGIN_FULL_VERSION);
+
+			pluginName +=
+				"-" + pluginFullVersion +
+					LiferayPluginsBuildConstants.EXTENSION_JAR;
+
+			File jarFile = new File(
+				_temporaryFolderRoot.getAbsolutePath(), pluginName);
+
+			WebArchive webArchive = ShrinkWrap.createFromZipFile(
+				WebArchive.class, jarFile);
 
 			return webArchive;
 		}
@@ -90,6 +128,22 @@ public class WebArchiveUtil {
 			projectHelper);
 
 		projectHelper.parse(project, buildFile);
+
+		return project;
+	}
+
+	protected static Project configureAntProjectForJar() {
+		Project project = configureAntProject();
+
+		project.setProperty(
+			LiferayPluginsBuildConstants.PROPERTY_AUTO_DEPLOY_DIR,
+			_temporaryFolderRoot.getAbsolutePath());
+
+		return project;
+	}
+
+	protected static Project configureAntProjectForWar() {
+		Project project = configureAntProject();
 
 		project.setProperty(
 			LiferayPluginsBuildConstants.PROPERTY_APP_SERVER_DEPLOY_DIR,

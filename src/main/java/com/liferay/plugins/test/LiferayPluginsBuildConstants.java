@@ -33,10 +33,18 @@ public class LiferayPluginsBuildConstants {
 	public static final String PROPERTY_APP_SERVER_DEPLOY_DIR =
 		"app.server.deploy.dir";
 
+	public static final String PROPERTY_AUTO_DEPLOY_DIR =
+		"auto.deploy.dir";
+
 	public static final String PROPERTY_AUTO_DEPLOY_UNPACK_WAR =
 		"auto.deploy.unpack.war";
 
+	public static final String PROPERTY_PLUGIN_FULL_VERSION =
+		"plugin.full.version";
+
 	public static final String PROPERTY_PLUGIN_NAME = "plugin.name";
+
+	public static final String TARGET_DEPLOY = "deploy";
 
 	public static final String TARGET_DIRECT_DEPLOY = "direct-deploy";
 
